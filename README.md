@@ -11,7 +11,9 @@
 
 ## 실행
 
-설치 과정 없이 `index.html`을 브라우저로 열면 됩니다. 로컬 서버로 확인하려면 저장소 폴더에서 다음 명령을 실행합니다.
+[GitHub Pages에서 시뮬레이터 열기](https://sr201232.github.io/air-premia-rotation-simulator/)
+
+설치 과정 없이 `index.html`을 브라우저로 직접 열어도 됩니다. 로컬 서버로 확인하려면 저장소 폴더에서 다음 명령을 실행합니다.
 
 ```powershell
 python -m http.server 8000
@@ -21,7 +23,7 @@ python -m http.server 8000
 
 ## 페이지 텍스트 바꾸기
 
-화면에 표시되는 문구는 [`src/simulator.html`](src/simulator.html)에 있습니다. 편집기에서 바꾸려는 현재 문구를 그대로 검색하는 것이 가장 빠릅니다.
+화면, 시간표 데이터, 충돌 계산 코드가 모두 [`index.html`](index.html) 하나에 들어 있습니다. 편집기에서 바꾸려는 현재 문구를 그대로 검색하는 것이 가장 빠릅니다.
 
 - 맨 위 제목: `기체는 그대로, 스케줄을 옮겨 보세요.` 검색
 - 설명 문구: `왕복 스케줄을 다른 기체 행으로` 검색
@@ -30,34 +32,22 @@ python -m http.server 8000
 - 하단 주의사항: `검증 기준:` 검색
 - 충돌·성공 메시지: `인천 대기 60분` 또는 `60분 확보에` 검색
 
-문구를 수정한 뒤 다음 명령으로 배포용 `index.html`을 다시 만듭니다.
+GitHub에서 직접 수정할 때는 다음 순서로 진행합니다.
 
-```powershell
-python scripts/build.py
-```
+1. 저장소에서 `index.html`을 엽니다.
+2. 오른쪽 위 연필 모양 **Edit this file**을 누릅니다.
+3. 문구를 수정합니다.
+4. **Commit changes**를 눌러 `main` 브랜치에 저장합니다.
+5. 잠시 기다리면 GitHub Pages에 자동 반영됩니다.
 
-급하게 한 번만 바꾸려면 루트의 `index.html`을 직접 수정해도 됩니다. 다만 `scripts/build.py`를 다시 실행하면 직접 수정한 내용은 덮어써지므로, 계속 유지할 문구는 `src/simulator.html`에서 바꾸는 편이 안전합니다.
-
-노선명·편명·운항시간 같은 데이터 문구는 [`data/result.json`](data/result.json)에 있습니다. 데이터를 수정한 뒤에도 같은 빌드 명령을 실행합니다.
+별도의 빌드 명령은 필요하지 않습니다. 노선명·편명·운항시간은 `index.html` 안의 `<script id="dataset" type="application/json">` 구역에 있습니다.
 
 ## 구조
 
 ```text
-index.html                         브라우저에서 여는 완성본
-src/simulator.html                 화면·문구·동작 원본
-src/simulator-engine.js            충돌 및 인천 대기시간 계산
-data/result.json                   시간표와 예시 9대 편성 데이터
-scripts/build.py                   원본과 데이터를 index.html로 합치는 도구
-tests/test-engine.cjs              계산 검증
+index.html                         시뮬레이터 전체 화면·데이터·계산 코드
 YP_winter_rotation_report.html     시간표 분석 및 출처 보고서
-```
-
-## 검증
-
-Node.js가 설치되어 있으면 다음 명령으로 계산 테스트를 실행할 수 있습니다.
-
-```powershell
-node tests/test-engine.cjs
+README.md                          사용 및 수정 안내
 ```
 
 시간표 자료 기준일은 2026-10-28이며, A01~A12는 실제 등록번호가 아닌 가상 기체 번호입니다. 정비, 결항, 승무원 및 기타 운항 제한은 계산에 포함하지 않습니다.
